@@ -6,6 +6,12 @@ app.get('/', (req, res) => {
     res.send('Hello world')
 })
 
+app.post('/auth/login', (req, res) => {
+    res.json({
+        success: true,
+    })
+})
+
 
 app.listen(3333, (error) => {
     if(error) {
