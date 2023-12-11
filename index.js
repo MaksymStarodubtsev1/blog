@@ -1,9 +1,12 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import * as dotenv from "dotenv";
+
+dotenv.config()
 
 mongoose.connect(
-    'mongodb+srv://MobileDatabase:__@cluster0.ggvs8al.mongodb.net/?retryWrites=true&w=majority'
+    `mongodb+srv://MobileDatabase:${process.env.MONGODB_KEY}@cluster0.ggvs8al.mongodb.net/?retryWrites=true&w=majority`
 )
 .then(() => console.log('Success connected'))
 .catch((error) => console.log('errror', error))
