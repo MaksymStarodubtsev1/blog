@@ -2,6 +2,7 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
+import { authValidator } from './validation/auth.js'
 
 dotenv.config()
 
@@ -19,18 +20,7 @@ app.get('/', (req, res) => {
     res.send('Hello world')
 })
 
-app.post('/auth/login', (req, res) => {
-
-    const token = jwt.sign({
-        email: req.body.email,
-        name: req.body.name,
-    }, 'super_secret')
-
-    res.json({
-        success: true,
-        token,
-    })
-})
+app.post('/auth/register', authValidator, (req, res) => {})
 
 
 app.listen(3333, (error) => {
