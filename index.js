@@ -1,10 +1,12 @@
 import express from "express";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 import { authValidator } from './validation/auth.js'
 
 import { validationResult } from "express-validator"
+import UserScheme from "./modules/User.js"
 
 dotenv.config()
 
@@ -22,14 +24,31 @@ app.get('/', (req, res) => {
     res.send('Hello world')
 })
 
-app.post('/auth/register', authValidator, (req, res) => {
+app.post('/auth/register', authValidator, async (req, res) => {
     const errors = validationResult(req)
 
+    // Checking request info on Errors
     if(!errors.isEmpty()) {
         res.status(400).json(errors.array())
     }
 
-    res.json('success')
+    // Genereting password hash
+    const password = req.body.password;
+    const salt = bcrypt.genSaltSync(10)
+    const passwordHash = await bcrypt.hash(password, salt)
+
+    // Creating User Scheme
+    const document = new UserScheme({
+        fullName: req.body.fullName,
+        email: req.body.email,
+        passwordHash,
+        avatarUrl: req.body.avatarUrl || ''
+    })
+
+    const user = await document.save()
+
+    // Registration Success
+    res.json(user)
 })
 
 
