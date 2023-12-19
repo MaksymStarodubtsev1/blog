@@ -24,6 +24,20 @@ app.get('/', (req, res) => {
     res.send('Hello world')
 })
 
+app.post('/auth/login', async (req, res) => {
+    try {
+        const user = await UserScheme.findOne({ email: req.body.email })
+
+        if(!user) {
+            res.status(404).json('wrong info, try again')
+        }
+
+        res.json('login success')
+    } catch (error) {
+        res.status(505).json('wrong auth info')
+    }
+})
+
 app.post('/auth/register', authValidator, async (req, res) => {
     try {
         const errors = validationResult(req)
