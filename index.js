@@ -11,7 +11,7 @@ import UserScheme from "./modules/User.js"
 dotenv.config()
 
 mongoose.connect(
-    `mongodb+srv://MobileDatabase:${process.env.MONGODB_KEY}@cluster0.ggvs8al.mongodb.net/?retryWrites=true&w=majority`
+    `mongodb+srv://MobileDatabase:${process.env.MONGODB_KEY}@cluster0.ggvs8al.mongodb.net/blog?retryWrites=true&w=majority`
 )
 .then(() => console.log('Success connected'))
 .catch((error) => console.log('errror', error))
