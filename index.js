@@ -25,30 +25,40 @@ app.get('/', (req, res) => {
 })
 
 app.post('/auth/register', authValidator, async (req, res) => {
-    const errors = validationResult(req)
+    try {
+        const errors = validationResult(req)
 
-    // Checking request info on Errors
-    if(!errors.isEmpty()) {
-        res.status(400).json(errors.array())
+        // Checking request info on Errors
+        if(!errors.isEmpty()) {
+            res.status(400).json(errors.array())
+        }
+    
+        // Genereting password hash
+        const password = req.body.password;
+        const salt = bcrypt.genSaltSync(10)
+        const passwordHash = await bcrypt.hash(password, salt)
+    
+        // Creating User Scheme
+        const document = new UserScheme({
+            fullName: req.body.fullName,
+            email: req.body.email,
+            passwordHash,
+            avatarUrl: req.body.avatarUrl || ''
+        })
+    
+        const user = await document.save()
+
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SALT);
+    
+        // Registration Success
+        res.json({
+            ...user._doc,
+            token: token,
+        });
+
+    } catch(error) {
+        res.status(500).json('Error appear, try again with other names')
     }
-
-    // Genereting password hash
-    const password = req.body.password;
-    const salt = bcrypt.genSaltSync(10)
-    const passwordHash = await bcrypt.hash(password, salt)
-
-    // Creating User Scheme
-    const document = new UserScheme({
-        fullName: req.body.fullName,
-        email: req.body.email,
-        passwordHash,
-        avatarUrl: req.body.avatarUrl || ''
-    })
-
-    const user = await document.save()
-
-    // Registration Success
-    res.json(user)
 })
 
 
