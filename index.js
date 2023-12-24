@@ -26,12 +26,21 @@ app.get('/', (req, res) => {
 
 app.post('/auth/login', async (req, res) => {
     try {
+        // Gettin user if exist
         const user = await UserScheme.findOne({ email: req.body.email })
 
+        // Comparing user request with data in DB
         if(!user) {
-            res.status(404).json('wrong info, try again')
+            res.status(404).json('wrong info, try again');
+        }
+        const isPasswordValid = await bcrypt.compare(req.body.password, user._doc.passwordHash)
+
+        if(!isPasswordValid) {
+            return res.status(401).json('wrong parrword or login');
         }
 
+
+        // Return success responce
         res.json('login success')
     } catch (error) {
         res.status(505).json('wrong auth info')
