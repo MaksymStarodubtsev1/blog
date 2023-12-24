@@ -38,10 +38,16 @@ app.post('/auth/login', async (req, res) => {
         if(!isPasswordValid) {
             return res.status(401).json('wrong parrword or login');
         }
+    
+        // Logination Success
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SALT);
+        
+        // Return user info with token
+        res.json({
+            ...user._doc,
+            token: token,
+        });
 
-
-        // Return success responce
-        res.json('login success')
     } catch (error) {
         res.status(505).json('wrong auth info')
     }
