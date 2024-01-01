@@ -2,6 +2,7 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
+import authMiddlevare from "./utils/authMiddlevare.js";
 import * as dotenv from "dotenv";
 import { authValidator } from './validation/auth.js'
 
@@ -22,6 +23,28 @@ app.use(express.json())
 
 app.get('/', (req, res) => {
     res.send('Hello world')
+})
+
+// Checking if user includes in request by authMiddlevare
+app.get('/auth/me', authMiddlevare, async (req, res) => {
+    try {
+
+        // Getting user by id
+        const user = await UserScheme.findById(req.id)
+
+        if(!user) {
+            res.status(403).json('Anuthorized')
+        }
+    
+        const { passwordHash, ...userData } = user._doc
+
+        // Reterning user info
+        res.json({
+            ...userData,
+        });
+    } catch (error) {
+        res.status(403).json(error)
+    }
 })
 
 app.post('/auth/login', async (req, res) => {
