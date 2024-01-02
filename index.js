@@ -4,8 +4,8 @@ import authMiddlevare from "./utils/authMiddlevare.js";
 import * as dotenv from "dotenv";
 import { authValidator } from './validation.js'
 
-import UserController from "./controllers/UserController.js";
-import PostController from "./controllers/PostController.js";
+import * as UserController from "./controllers/UserController.js";
+import * as PostController from "./controllers/PostController.js";
 
 dotenv.config()
 
@@ -28,7 +28,7 @@ app.get('/auth/me', authMiddlevare, UserController.getMe)
 app.post('/auth/login', UserController.login)
 app.post('/auth/register', authValidator, UserController.register)
 
-app.post('post', authValidator, PostController.create)
+app.post('/post', authMiddlevare, PostController.create)
 
 
 app.listen(3333, (error) => {

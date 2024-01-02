@@ -1,12 +1,13 @@
-import Post from '../modules/Post.js';
+import PostModel from '../modules/Post.js';
 
 export const create = async (req, res) => {
     try {
-        const doc = new Post({
+        console.log('Hi')
+        const doc = new PostModel({
             title: req.body.title,
             text: req.body.text,
             tags: req.body.tags,
-            user: req.userId,
+            user: req.id,
         });
 
         const post = await doc.save();
