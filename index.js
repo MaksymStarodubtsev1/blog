@@ -4,7 +4,8 @@ import authMiddlevare from "./utils/authMiddlevare.js";
 import * as dotenv from "dotenv";
 import { authValidator } from './validation.js'
 
-import { register,getMe, login } from "./controllers/UserControllers.js";
+import UserController from "./controllers/UserController.js";
+import PostController from "./controllers/PostController.js";
 
 dotenv.config()
 
@@ -23,11 +24,11 @@ app.get('/', (req, res) => {
 })
 
 // Checking if user includes in request by authMiddlevare
-app.get('/auth/me', authMiddlevare, getMe)
+app.get('/auth/me', authMiddlevare, UserController.getMe)
+app.post('/auth/login', UserController.login)
+app.post('/auth/register', authValidator, UserController.register)
 
-app.post('/auth/login', login)
-
-app.post('/auth/register', authValidator, register)
+app.post('post', authValidator, PostController.create)
 
 
 app.listen(3333, (error) => {
