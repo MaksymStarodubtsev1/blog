@@ -1,6 +1,18 @@
 import PostModel from '../modules/Post.js';
 import { validationResult } from "express-validator"
 
+
+export const getAll = async (req, res) => {
+    try {
+        const doc = await PostModel.find().populate('user')
+
+        res.json(doc)
+
+    } catch(error) {
+        res.status(500).json('Error appear, try again with other info')
+    }
+}
+
 export const create = async (req, res) => {
     try {
         const errors = validationResult(req)

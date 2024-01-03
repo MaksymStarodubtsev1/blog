@@ -29,6 +29,7 @@ app.post('/auth/login', UserController.login)
 app.post('/auth/register', authValidator, UserController.register)
 
 app.post('/post', postValidation, authMiddlevare, PostController.create)
+app.get('/posts', PostController.getAll)
 
 
 app.listen(3333, (error) => {
