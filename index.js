@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import authMiddlevare from "./utils/authMiddlevare.js";
 import * as dotenv from "dotenv";
-import { authValidator } from './validation.js'
+import { authValidator, postValidation } from './validation.js'
 
 import * as UserController from "./controllers/UserController.js";
 import * as PostController from "./controllers/PostController.js";
@@ -28,7 +28,7 @@ app.get('/auth/me', authMiddlevare, UserController.getMe)
 app.post('/auth/login', UserController.login)
 app.post('/auth/register', authValidator, UserController.register)
 
-app.post('/post', authMiddlevare, PostController.create)
+app.post('/post', postValidation, authMiddlevare, PostController.create)
 
 
 app.listen(3333, (error) => {

@@ -1,8 +1,15 @@
 import PostModel from '../modules/Post.js';
+import { validationResult } from "express-validator"
 
 export const create = async (req, res) => {
     try {
-        console.log('Hi')
+        const errors = validationResult(req)
+
+        if(!errors.isEmpty()) {
+            console.log('errors', errors)
+            res.status(400).json(errors.array())
+        }
+
         const doc = new PostModel({
             title: req.body.title,
             text: req.body.text,
