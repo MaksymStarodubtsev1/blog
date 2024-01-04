@@ -36,6 +36,25 @@ export const getOne = async (req, res) => {
     }
 }
 
+export const remove = async (req, res) => {
+    try {
+        const postId = req.params.id
+
+        PostModel.findByIdAndDelete({
+            _id: postId,
+        })
+        .then((doc) => {
+            res.json(doc)
+        })
+        .catch(() => {
+            res.status(404).json('Cannot delete post')
+        })
+
+    } catch(error) {
+        res.status(404).json('Error appear, no info found')
+    }
+}
+
 export const create = async (req, res) => {
     try {
         const errors = validationResult(req)
