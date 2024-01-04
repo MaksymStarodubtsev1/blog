@@ -55,6 +55,39 @@ export const remove = async (req, res) => {
     }
 }
 
+export const update = async (req, res) => {
+    try {
+        const postId = req.params.id
+
+        const errors = validationResult(req)
+
+        if(!errors.isEmpty()) {
+            console.log('errors', errors)
+            res.status(400).json(errors.array())
+        }
+
+        PostModel.findByIdAndUpdate({
+            _id: postId,
+        },
+        {
+            title: req.body.title,
+            text: req.body.text,
+            tags: req.body.tags,
+            ...req.body,
+        }, {new: true})
+        .then(updatedDoc => {
+            res.json(updatedDoc)
+        })
+        .catch(() => {
+            res.status(403).json('Could not to update post')
+        })
+
+
+    } catch(error) {
+        res.status(400).json('Error appear, no info found')
+    }
+}
+
 export const create = async (req, res) => {
     try {
         const errors = validationResult(req)

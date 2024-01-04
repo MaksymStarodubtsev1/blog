@@ -32,6 +32,7 @@ app.post('/post', postValidation, authMiddlevare, PostController.create)
 app.get('/posts', PostController.getAll)
 app.get('/posts/:id', PostController.getOne)
 app.delete('/posts/:id', authMiddlevare, PostController.remove)
+app.patch('/posts/:id', postValidation, authMiddlevare, PostController.update)
 
 
 app.listen(3333, (error) => {

@@ -10,6 +10,6 @@ export const authValidator = [
 export const postValidation = [
     body('title', 'Please enter post title').isLength({min: 3}).isString(),
     body('text', 'Please enter text for post').isLength({min: 3}).isString(),
-    body('tags', 'Enter correct format (should be array)').optional().isString(),
+    body('tags', 'Enter correct format (should be array)').optional().isArray(),
     body('imageUrl', 'Provide correct url').optional().isURL(),
 ];
