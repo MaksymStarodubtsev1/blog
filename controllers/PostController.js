@@ -74,7 +74,9 @@ export const update = async (req, res) => {
             text: req.body.text,
             tags: req.body.tags,
             ...req.body,
-        }, {new: true})
+        },
+        {new: true},
+        )
         .then(updatedDoc => {
             res.json(updatedDoc)
         })
