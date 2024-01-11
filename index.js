@@ -28,9 +28,9 @@ app.get('/auth/me', authMiddlevare, UserController.getMe)
 app.post('/auth/login', UserController.login)
 app.post('/auth/register', authValidator, UserController.register)
 
-app.post('/post', postValidation, authMiddlevare, PostController.create)
 app.get('/posts', PostController.getAll)
 app.get('/posts/:id', PostController.getOne)
+app.post('/post', postValidation, authMiddlevare, PostController.create)
 app.delete('/posts/:id', authMiddlevare, PostController.remove)
 app.patch('/posts/:id', postValidation, authMiddlevare, PostController.update)
 
