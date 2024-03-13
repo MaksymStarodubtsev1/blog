@@ -1,4 +1,5 @@
 import express from "express";
+import multer from "multer";
 import mongoose from "mongoose";
 import authMiddlevare from "./utils/authMiddlevare.js";
 import * as dotenv from "dotenv";
@@ -16,6 +17,16 @@ mongoose.connect(
 .catch((error) => console.log('errror', error))
 
 const app = express()
+const storage = multer.diskStorage({
+    destination: function (_, __, cb) {
+        cb(null, 'uploads')
+    },
+    filename: function (_, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        cb(null, file.originalname)
+    }
+})
+const upload = multer({ storage: storage })
 
 app.use(express.json())
 
@@ -33,6 +44,11 @@ app.get('/posts/:id', PostController.getOne)
 app.post('/post', postValidation, authMiddlevare, PostController.create)
 app.delete('/posts/:id', authMiddlevare, PostController.remove)
 app.patch('/posts/:id', postValidation, authMiddlevare, PostController.update)
+
+// Files uploading
+app.post('/upload', authMiddlevare, upload.single('image'), function (req, res) {
+    res.json({url: req.file.filename})
+ });
 
 
 app.listen(3333, (error) => {
