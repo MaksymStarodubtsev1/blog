@@ -1,13 +1,12 @@
 import express from "express";
 import multer from "multer";
 import mongoose from "mongoose";
-import authMiddlevare from "./utils/authMiddlevare.js";
 import * as dotenv from "dotenv";
+
 import { authValidator, postValidation } from './validation.js'
 
-import * as UserController from "./controllers/UserController.js";
-import * as PostController from "./controllers/PostController.js";
-import handleValidationError from "./utils/handleValidationError.js";
+import { UserController, PostController } from './controllers/index.js';
+import { authMiddlevare, handleValidationError } from './utils/index.js';
 
 dotenv.config()
 
