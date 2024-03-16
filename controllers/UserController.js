@@ -55,13 +55,6 @@ export const getMe = async (req, res) => {
 
 export const register = async (req, res) => {
     try {
-        const errors = validationResult(req)
-
-        // Checking request info on Errors
-        if(!errors.isEmpty()) {
-            res.status(400).json(errors.array())
-        }
-    
         // Genereting password hash
         const password = req.body.password;
         const salt = bcrypt.genSaltSync(10)

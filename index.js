@@ -7,6 +7,7 @@ import { authValidator, postValidation } from './validation.js'
 
 import * as UserController from "./controllers/UserController.js";
 import * as PostController from "./controllers/PostController.js";
+import handleValidationError from "./utils/handleValidationError.js";
 
 dotenv.config()
 
@@ -36,19 +37,19 @@ app.get('/', (req, res) => {
 // Checking if user includes in request by authMiddlevare
 app.get('/auth/me', authMiddlevare, UserController.getMe)
 app.post('/auth/login', UserController.login)
-app.post('/auth/register', authValidator, UserController.register)
+app.post('/auth/register', authValidator, handleValidationError, UserController.register)
 
 app.get('/posts', PostController.getAll)
 app.get('/posts/:id', PostController.getOne)
-app.post('/post', postValidation, authMiddlevare, PostController.create)
+app.post('/post', postValidation, handleValidationError, authMiddlevare, PostController.create)
 app.delete('/posts/:id', authMiddlevare, PostController.remove)
-app.patch('/posts/:id', postValidation, authMiddlevare, PostController.update)
+app.patch('/posts/:id', postValidation, handleValidationError, authMiddlevare, PostController.update)
 
 // Files uploading
+app.use('/uploads', express.static('uploads'))
 app.post('/upload', authMiddlevare, upload.single('image'), function (req, res) {
-    res.json({url: req.file.filename})
+    res.json({url: `/uploads/${req.file.originalname}`})
  });
-
 
 app.listen(3333, (error) => {
     if(error) {

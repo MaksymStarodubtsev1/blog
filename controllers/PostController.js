@@ -1,5 +1,4 @@
 import PostModel from '../modules/Post.js';
-import { validationResult } from "express-validator"
 
 
 export const getAll = async (req, res) => {
@@ -59,13 +58,6 @@ export const update = async (req, res) => {
     try {
         const postId = req.params.id
 
-        const errors = validationResult(req)
-
-        if(!errors.isEmpty()) {
-            console.log('errors', errors)
-            res.status(400).json(errors.array())
-        }
-
         PostModel.findByIdAndUpdate({
             _id: postId,
         },
@@ -92,13 +84,6 @@ export const update = async (req, res) => {
 
 export const create = async (req, res) => {
     try {
-        const errors = validationResult(req)
-
-        if(!errors.isEmpty()) {
-            console.log('errors', errors)
-            res.status(400).json(errors.array())
-        }
-
         const doc = new PostModel({
             title: req.body.title,
             text: req.body.text,
